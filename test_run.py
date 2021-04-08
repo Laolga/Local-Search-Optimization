@@ -5,11 +5,9 @@ from libAP import LSOprimizer
 true_case = open("data/true_HT.txt", "r").read().split("\n")[:-1]
 true_control = open("data/true_control.txt", "r").read().split("\n")[:-1]
 
-path_expr, path_net = 'data/expr.csv', 'data/biogrid.human.entrez.tsv '
+path_expr, path_net = 'data/expr.csv', 'data/biogrid_net.tsv'
 
 GE, GX, labels_ids, rev = data_preprocessing(path_expr, path_net, log2=True, size=3000)
-ge = GE.values
-genes = list(GX.nodes)
 n, m = GE.shape
 
 patients = list(GE.columns)

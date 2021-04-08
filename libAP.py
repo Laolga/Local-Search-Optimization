@@ -410,7 +410,7 @@ class LSOprimizer:
             # for  whatever reason dfs sometimes returns nothing
             no_type = True
             while no_type:
-                nodes = self.dfs(self, self.G.vertex(np.random.choice(self.genes, 1)[0]), self.init_size)
+                nodes = self.dfs(self.G.vertex(np.random.choice(self.genes, 1)[0]), self.init_size)
                 if nodes is not None:
                     no_type = False
         else:
