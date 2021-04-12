@@ -8,8 +8,24 @@ flatten = lambda l: [item for sublist in l for item in sublist]
 
 
 class LSOprimizer:
-    def __init__(self, GE, G, T, L_min, L_max, max_iter=100, plot=True, opt_pat=None, k=2,
+    def __init__(self, GE, G, L_min, L_max, T = 20, max_iter=100, plot=True, opt_pat=None, k=2,
                  init_size=None, seed=None, verbose=True):
+        """
+        Given a graph G and gene expression matrix GE finds the optimal subnetwork in G of size at least L_min and
+        at most L_max that can provide the optimal patients clustering in k clusters.
+        :param GE: pandas DatFrame with gene expression
+        :param G: networkX graph with PPI network
+        :param L_min: minimal desired solution subnetwork size
+        :param L_max: maximal desired solution subnetwork size
+        :param T: temprature parameter for SA
+        :param max_iter: maximal allowed number of iterations
+        :param plot: convergence plot (True/False)
+        :param opt_pat: patients labels (if provided, patients clustering won't be performed
+        :param k: nmber of clusters
+        :param init_size: initial subnetwork size (default L_max *2)
+        :param seed: seed
+        :param verbose: True/False
+        """
         self.G = nx2gt(G)
         self.T = T
         self.L_min = L_min
@@ -44,7 +60,6 @@ class LSOprimizer:
         :param nodes: current node set
 
         for more details: https://www.geeksforgeeks.org/articulation-points-or-cut-vertices-in-a-graph/
-        :return:
         """
 
         # Count of children in current node
@@ -89,12 +104,13 @@ class LSOprimizer:
                     # The function to do DFS traversal. It uses recursive APUtil()
 
     def is_AP(self, nodes):
-        # The function to do DFS traversal. It uses recursive APUtil()
-
-        # Mark all the vertices as not visited
-        # and Initialize parent and visited,
-        # and ap(articulation point) arrays
-
+        """
+        Checks which nodes in the given set of nodes can NOT be removed without breaking
+        disconnecting the induced subgraph
+        :param nodes: set of nodes that make an induced subgraph of G
+        :return: dictionary where each key is a node and each value indicates if a node is
+        removable (articulation point)
+        """
         visited = dict()
         disc = dict()
         low = dict()
@@ -118,12 +134,10 @@ class LSOprimizer:
 
     def score(self, nodes, labels):
         """
-        Scores the given solution
-        Attributes:
-        -----------
-        nodes - list of nodes used in the solution
-
-        labels - patient cluster labels
+        scores  given solution which is defined as a subnetwork and patient clusters
+        :param nodes: list of nodes used in the solution
+        :param labels: patient cluster labels
+        :return: objective function value
         """
         vs = []
         centroids = []
